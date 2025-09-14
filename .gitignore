@@ -1,5 +1,10 @@
-node_modules
+Ignore Node.js module folders
+node_modules/
+client/node_modules/
+server/node_modules/
 
 Ignore environment variables files
 .env
 
+Ignore the build folder
+client/build/
