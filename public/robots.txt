@@ -1,4 +1,0 @@
-For more information about robots.txt, see https://www.robotstxt.org/
-The following directives disallow all user agents from accessing the entire site.
-User-agent: *
-Disallow: /
