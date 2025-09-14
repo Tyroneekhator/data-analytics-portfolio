@@ -1,25 +1,56 @@
-// This file will contain the logic for handling project-related requests.
+const Project = require("../models/Project");
 
-// Placeholder function to get all projects.
-exports.getAllProjects = (req, res) => {
-  // In a real application, you would fetch data from the database here.
-  res.status(200).json({ message: "This route will get all projects." });
+// Get all projects
+exports.getAllProjects = async (req, res) => {
+  try {
+    const projects = await Project.find();
+    res.json(projects);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
-// Placeholder function to create a new project.
-exports.createProject = (req, res) => {
-  // In a real application, you would save a new project to the database here.
-  res.status(201).json({ message: "This route will create a new project." });
+// Create a new project
+exports.createProject = async (req, res) => {
+  const project = new Project({
+    title: req.body.title,
+    description: req.body.description,
+    imageUrl: req.body.imageUrl,
+    tags: req.body.tags,
+  });
+
+  try {
+    const newProject = await project.save();
+    res.status(201).json(newProject);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 };
 
-// Placeholder function to update a project.
-exports.updateProject = (req, res) => {
-  // In a real application, you would update an existing project in the database here.
-  res.status(200).json({ message: "This route will update a project." });
+// Update an existing project
+exports.updateProject = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedProject = await Project.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    if (!updatedProject)
+      return res.status(404).json({ message: "Project not found" });
+    res.json(updatedProject);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 };
 
-// Placeholder function to delete a project.
-exports.deleteProject = (req, res) => {
-  // In a real application, you would delete a project from the database here.
-  res.status(200).json({ message: "This route will delete a project." });
+// Delete a project
+exports.deleteProject = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedProject = await Project.findByIdAndDelete(id);
+    if (!deletedProject)
+      return res.status(404).json({ message: "Project not found" });
+    res.json({ message: "Project deleted" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
